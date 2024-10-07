@@ -63,6 +63,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "md5": "^2.3.0"
+    "md5": "^2.3.0",
+    "preversion": "^0.1.1"
   }
 }

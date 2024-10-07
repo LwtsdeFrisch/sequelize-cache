@@ -16,6 +16,7 @@ class SequelizeSimpleCache {
       ],
       limit: 50,
       clearOnUpdate: true,
+      key: null,
     };
     this.config = Object.entries(config)
       .reduce((acc, [type, {
@@ -56,7 +57,7 @@ class SequelizeSimpleCache {
     return inspect(obj, { depth: Infinity, maxArrayLength: Infinity, breakLength: Infinity });
   }
 
-  init(model) { // Sequelize model object
+  init(model, runtimeKey = undefined) { // Sequelize model object
     const { name: type } = model;
     // setup caching for this model
     const config = this.config[type];
@@ -98,7 +99,7 @@ class SequelizeSimpleCache {
             assert(promise.then, `${type}.${prop}() did not return a promise but should`);
             return promise;
           }
-          const key = SequelizeSimpleCache.key({ type, prop, args });
+          const key = runtimeKey || SequelizeSimpleCache.key({ type, prop, args });
           const hash = md5(key);
           const item = cache.get(hash);
           if (item) { // hit
